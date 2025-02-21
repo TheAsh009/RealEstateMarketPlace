@@ -50,5 +50,6 @@ exports.authController = async (req, res) => {
       success: false,
       message: "Error Occured While Signed Up",
     });
+    next(error);
   }
 };
