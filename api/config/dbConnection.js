@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const connectDb = () => {
   mongoose
-    .connect(
-      "mongodb+srv://ashitoshpatil27:hrjKiTBU7OtpxhrL@cluster0.tmeig.mongodb.net/RealEstateMarketPlace"
-    )
+    .connect(process.env.DATABASE_URL)
     .then(() => {
       console.log("Database Connection Successful");
     })
