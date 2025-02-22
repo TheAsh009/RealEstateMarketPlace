@@ -3,11 +3,14 @@ const app = express();
 const authRoute = require("./routes/auth.route.js");
 const dbConnection = require("./config/dbConnection");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 //server creation
 app.listen(4000, () => {
   console.log("API is running on port 4000");
 });
+
+app.use(cookieParser());
 
 // use cors middleware
 app.use(

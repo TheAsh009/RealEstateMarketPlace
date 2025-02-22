@@ -83,7 +83,7 @@ function SignUp() {
             >
               {loading ? "Loading..." : "SIGN UP"}
             </button>
-            <button className="bg-red-600 rounded-lg text-[#fff] py-2 cursor-pointer mt-5">
+            <button className="bg-red-700 rounded-lg text-[#fff] py-2 cursor-pointer mt-5">
               CONTINUE WITH GOOGLE
             </button>
           </form>

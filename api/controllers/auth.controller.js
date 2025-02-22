@@ -1,7 +1,9 @@
 const User = require("../models/user.model.js");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-exports.authController = async (req, res) => {
+exports.signUp = async (req, res) => {
   try {
     //getting the data from req body
     const { username, email, password } = req.body;
@@ -51,5 +53,75 @@ exports.authController = async (req, res) => {
       message: error.message,
     });
     // next(error);
+  }
+};
+
+//signIn
+exports.signIn = async (req, res) => {
+  try {
+    //get the data from the req body
+    const { email, password } = req.body;
+
+    console.log("Input from the user", email, password);
+    //validate the inputed data
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Fill All the Fields",
+      });
+    }
+
+    //check that the user is signed up
+    const checkUserIsSignedUp = await User.findOne({ email });
+    console.log("Check the user is signed up", checkUserIsSignedUp);
+
+    //if user is not signed Up
+    if (!checkUserIsSignedUp) {
+      return res.status(401).json({
+        success: false,
+        message: "User is not Signed Up Please Signed Up first",
+      });
+    }
+
+    const payload = {
+      id: checkUserIsSignedUp._id,
+      email: checkUserIsSignedUp.email,
+    };
+
+    let token;
+
+    //is use is available then check the password
+    if (await bcrypt.compare(password, checkUserIsSignedUp.password)) {
+      token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "2h",
+      });
+      checkUserIsSignedUp.token = token;
+      checkUserIsSignedUp.password = undefined;
+      console.log("After adding token into user ", checkUserIsSignedUp);
+      return res
+        .cookie("token", token, {
+          httpOnly: true,
+          expires: new Date(Date.now() + 60 * 60 * 1000),
+        })
+        .status(200)
+        .json({
+          success: true,
+          message: "User Logged In Succesfully",
+          checkUserIsSignedUp,
+          token,
+        });
+    } else {
+      console.log("Incorrect Password");
+      return res.status(401).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  } catch (error) {
+    console.log("Error Occured in the Sign In Controller");
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
