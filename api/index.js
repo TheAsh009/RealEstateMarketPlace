@@ -2,11 +2,21 @@ const express = require("express");
 const app = express();
 const authRoute = require("./routes/auth.route.js");
 const dbConnection = require("./config/dbConnection");
+const cors = require("cors");
 
 //server creation
 app.listen(4000, () => {
   console.log("API is running on port 4000");
 });
+
+// use cors middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Change this to your frontend URL
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 //default route
 app.get("/", (req, res) => {

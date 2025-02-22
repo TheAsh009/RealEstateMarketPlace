@@ -18,7 +18,7 @@ exports.authController = async (req, res) => {
 
     //check the user is already exist
     const checkUserIsAlreadyExist = await User.findOne({ email });
-    console.log(checkUserIsAlreadyExist);
+    console.log("Check that user is already exist", checkUserIsAlreadyExist);
 
     if (checkUserIsAlreadyExist) {
       return res.status(200).json({
@@ -29,7 +29,7 @@ exports.authController = async (req, res) => {
 
     //if User is not already exist then hash the password
     let hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
+    console.log("Hash Password", hashedPassword);
 
     //create db entry for the User
     const newUser = await User.create({
@@ -37,7 +37,7 @@ exports.authController = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    console.log(newUser);
+    console.log("newUser", newUser);
     //return successful signedup response
     return res.status(200).json({
       success: true,
@@ -48,8 +48,8 @@ exports.authController = async (req, res) => {
     console.log("Error Occured in the Auth Controller");
     res.status(400).json({
       success: false,
-      message: "Error Occured While Signed Up",
+      message: error.message,
     });
-    next(error);
+    // next(error);
   }
 };
