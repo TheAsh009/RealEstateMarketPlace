@@ -88,20 +88,19 @@ exports.signIn = async (req, res) => {
       email: checkUserIsSignedUp.email,
     };
 
-    let token;
-
     //is use is available then check the password
     if (await bcrypt.compare(password, checkUserIsSignedUp.password)) {
-      token = jwt.sign(payload, process.env.JWT_SECRET, {
+      let token = jwt.sign(payload, process.env.JWT_SECRET, {
         expiresIn: "2h",
       });
       checkUserIsSignedUp.token = token;
+
       checkUserIsSignedUp.password = undefined;
-      console.log("After adding token into user ", checkUserIsSignedUp);
+
       return res
         .cookie("token", token, {
           httpOnly: true,
-          expires: new Date(Date.now() + 60 * 60 * 1000),
+          expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
         })
         .status(200)
         .json({

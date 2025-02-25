@@ -26,6 +26,7 @@ function SignUp() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(formData),
       });
       const data = await res.json();
@@ -90,7 +91,7 @@ function SignUp() {
           <div>
             <p className="mt-5">
               Have an Account ?{" "}
-              <Link to="sign-in">
+              <Link to="/sign-in">
                 <span className="text-blue-400">Sign In</span>
               </Link>
             </p>
