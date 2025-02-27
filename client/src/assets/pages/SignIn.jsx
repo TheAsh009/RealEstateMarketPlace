@@ -8,6 +8,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../../redux/user/userSlice";
+import OAuth from "../../components/OAuth";
 
 function SignIn() {
   // const [loading, setLoading] = useState(false);
@@ -86,9 +87,7 @@ function SignIn() {
             >
               {loading ? "Loading..." : "SIGN IN"}
             </button>
-            <button className="bg-red-700 rounded-lg text-[#fff] py-2 cursor-pointer mt-5">
-              CONTINUE WITH GOOGLE
-            </button>
+            <OAuth />
           </form>
           <div>
             <p className="mt-5">

@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader";
+import OAuth from "../../components/OAuth";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
@@ -84,9 +85,7 @@ function SignUp() {
             >
               {loading ? "Loading..." : "SIGN UP"}
             </button>
-            <button className="bg-red-700 rounded-lg text-[#fff] py-2 cursor-pointer mt-5">
-              CONTINUE WITH GOOGLE
-            </button>
+            <OAuth />
           </form>
           <div>
             <p className="mt-5">
