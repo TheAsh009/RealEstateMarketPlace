@@ -1,9 +1,12 @@
 import React from "react";
-
 import { IoSearch } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { current } from "@reduxjs/toolkit";
 
 function Header() {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -29,8 +32,16 @@ function Header() {
           <Link to="/about">
             <li className="hidden sm:inline hover:underline">About</li>
           </Link>
-          <Link to="/sign-in">
-            <li className="hidden sm:inline hover:underline">Sign In</li>
+          <Link to="/profile">
+            {currentUser ? (
+              <img
+                src={currentUser.avatar}
+                alt="Profile"
+                className="w-7 h-7 rounded-full object-cover"
+              />
+            ) : (
+              <li className="hidden sm:inline hover:underline">Sign In</li>
+            )}
           </Link>
         </ul>
       </div>

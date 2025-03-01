@@ -130,45 +130,43 @@ exports.google = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1hr",
+      });
       const { password: pass, ...rest } = user._doc;
+      // user._doc.password = undefined;
       res
         .cookie("token", token, {
           httpOnly: true,
           expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
         })
         .status(200)
-        .json({
-          success: true,
-          rest,
-        });
+        .json(rest);
     } else {
-      const generatedPassword =
-        Math.random().toString(36).slice(-8) +
-        Math.random().toString(36).slice(-8);
+      const generatedPassword = Math.random().toString(36).slice(-8);
+      // Math.random().toString(36).slice(-8);
 
-      const hashedPassword = bcrypt.hash(generatedPassword, 10);
+      const hashedPassword = await bcrypt.hash(generatedPassword, 10);
 
       const newUser = new User({
-        username:
-          req.body.name.split(" ").join("").toLowerCase() +
-          Math.random().toString(36).slice(-4),
+        username: req.body.name,
         email: req.body.email,
         password: hashedPassword,
         avatar: req.body.photo,
       });
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expires: "1hr",
+        expiresIn: "1hr",
       });
       const { password: pass, ...rest } = newUser._doc;
-      return res.cookie("token", token, { httpOnly: true }).status(200).json({
-        success: true,
-        rest,
-      });
+      // newUser._doc.password = undefined;
+      return res
+        .cookie("token", token, { httpOnly: true })
+        .status(200)
+        .json(rest);
     }
   } catch (error) {
-    console.log("Error Occured in google controller");
+    console.log("Error Occured in google controller", error.message);
     return res.status(401).json({
       success: false,
       message: error.message,
