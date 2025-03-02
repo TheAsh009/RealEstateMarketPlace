@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const authRoute = require("./routes/auth.route.js");
+const userRoute = require("./routes/user.route.js");
 const dbConnection = require("./config/dbConnection");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -29,7 +30,7 @@ app.use(express.json());
 
 //mount the component
 app.use("/api/v1/auth", authRoute);
-
+app.use("/api/v1/user", userRoute);
 //create middleware for handling the error
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
